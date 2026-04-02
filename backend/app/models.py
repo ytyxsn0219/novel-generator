@@ -74,3 +74,13 @@ class Feedback(Base):
     novel = relationship("Novel", back_populates="feedbacks")
     chapter = relationship("Chapter", back_populates="feedbacks")
     jobs = relationship("GenerationJob", back_populates="feedback")
+
+
+class SystemConfig(Base):
+    __tablename__ = "system_configs"
+
+    id = Column(PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    key = Column(String, nullable=False, unique=True)
+    value = Column(Text, nullable=False)
+    description = Column(String, nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

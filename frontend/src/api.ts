@@ -53,3 +53,46 @@ export async function createFeedback(novelId: string, content: string, chapterId
   });
   return res.json();
 }
+
+// Config APIs
+export interface LLMConfig {
+  provider: string;
+  model: string;
+  api_key: string;
+  base_url?: string;
+  temperature: number;
+  max_tokens: number;
+}
+
+export interface LLMConfigResponse {
+  provider: string;
+  model: string;
+  base_url?: string;
+  temperature: number;
+  max_tokens: number;
+}
+
+export interface LLMStatus {
+  configured: boolean;
+  provider: string;
+  model: string;
+}
+
+export async function getLLMConfig(): Promise<LLMConfigResponse> {
+  const res = await fetch(`${API_BASE}/config/llm`);
+  return res.json();
+}
+
+export async function updateLLMConfig(config: LLMConfig): Promise<{status: string; message: string}> {
+  const res = await fetch(`${API_BASE}/config/llm`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(config),
+  });
+  return res.json();
+}
+
+export async function getLLMStatus(): Promise<LLMStatus> {
+  const res = await fetch(`${API_BASE}/config/llm/status`);
+  return res.json();
+}

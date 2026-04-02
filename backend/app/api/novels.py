@@ -3,8 +3,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app import models, schemas
-from app.config import get_llm_router
+from app.config import get_db_llm_config
 from app.services.settings_generator import generate_settings
+from app.llm.base import ModelConfig
+from app.llm.openai_client import OpenAICompatibleClient
 
 router = APIRouter(prefix="/novels", tags=["novels"])
 
@@ -32,10 +34,19 @@ def generate_novel_settings(novel_id: str, db: Session = Depends(get_db)):
     if not novel:
         raise HTTPException(status_code=404, detail="Novel not found")
 
-    # Generate settings using LLM
-    router = get_llm_router()
-    config = router.get_config("settings")
-    from app.llm.openai_client import OpenAICompatibleClient
+    # Get config from database
+    db_config = get_db_llm_config(db)
+
+    # Create ModelConfig
+    config = ModelConfig(
+        provider=db_config["provider"],
+        model=db_config["model"],
+        api_key=db_config["api_key"],
+        base_url=db_config["base_url"],
+        temperature=db_config["temperature"],
+        max_tokens=db_config["max_tokens"]
+    )
+
     client = OpenAICompatibleClient()
 
     settings = generate_settings(client, novel.theme, config)

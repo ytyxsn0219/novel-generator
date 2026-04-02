@@ -79,3 +79,31 @@ class JobResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SystemConfigItem(BaseModel):
+    key: str
+    value: str
+    description: Optional[str] = None
+
+
+class SystemConfigUpdate(BaseModel):
+    value: str
+
+
+class LLMConfig(BaseModel):
+    provider: str = "openai"
+    model: str = "gpt-4o"
+    api_key: str
+    base_url: Optional[str] = None
+    temperature: float = 0.7
+    max_tokens: int = 4000
+
+
+class LLMConfigResponse(BaseModel):
+    provider: str
+    model: str
+    base_url: Optional[str]
+    temperature: float
+    max_tokens: int
+    # api_key 不返回，保护密钥
