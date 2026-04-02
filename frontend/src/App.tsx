@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import NovelList from './components/NovelList';
+import SettingEditor from './components/SettingEditor';
 import type { Novel } from './types';
 
 function App() {
@@ -9,7 +10,9 @@ function App() {
     <div style={{ padding: 20 }}>
       <h1>Novel Generator</h1>
       <NovelList onSelect={setSelectedNovel} />
-      {selectedNovel && <p>Selected: {selectedNovel.title}</p>}
+      {selectedNovel && selectedNovel.status === 'drafting' && (
+        <SettingEditor novel={selectedNovel} onUpdate={setSelectedNovel} />
+      )}
     </div>
   );
 }
