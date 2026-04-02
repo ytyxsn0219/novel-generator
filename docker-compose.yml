@@ -57,12 +57,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    command: celery -A app.services.celery_app worker --loglevel=info
+    command: celery -A worker.celery_app worker --loglevel=info
 
   frontend:
     build: ./frontend
     ports:
-      - "80:80"
+      - "3000:80"
     depends_on:
       - backend
 
