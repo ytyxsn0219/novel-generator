@@ -23,3 +23,12 @@ def test_generate_chapter_parses_json():
     title, content = generate_chapter(mock_client, {}, "", 1, ModelConfig(provider="x", model="m", api_key="k"))
     assert title == "T"
     assert content == "C"
+
+from app.services.feedback_handler import infer_feedback_scope
+
+def test_infer_scope_returns_chapter():
+    mock_client = MagicMock()
+    mock_client.generate.return_value = "chapter"
+    from app.llm.base import ModelConfig
+    scope = infer_feedback_scope(mock_client, {}, None, "fix typo", ModelConfig(provider="x", model="m", api_key="k"))
+    assert scope == "chapter"
