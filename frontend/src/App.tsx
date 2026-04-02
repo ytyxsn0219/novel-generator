@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NovelList from './components/NovelList';
 import SettingEditor from './components/SettingEditor';
+import Reader from './components/Reader';
 import type { Novel } from './types';
 
 function App() {
@@ -12,6 +13,9 @@ function App() {
       <NovelList onSelect={setSelectedNovel} />
       {selectedNovel && selectedNovel.status === 'drafting' && (
         <SettingEditor novel={selectedNovel} onUpdate={setSelectedNovel} />
+      )}
+      {selectedNovel && selectedNovel.status === 'serializing' && (
+        <Reader novel={selectedNovel} />
       )}
     </div>
   );
