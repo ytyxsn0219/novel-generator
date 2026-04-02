@@ -17,3 +17,19 @@ def test_openai_client_generate():
         })
         result = client.generate("say hi", cfg)
         assert result == "hello"
+
+from app.llm.router import ModelRouter
+
+def test_single_mode_router():
+    router = ModelRouter(mode="single", default={"provider":"openai","model":"gpt-4o","api_key":"k"})
+    cfg = router.get_config("writing")
+    assert cfg.provider == "openai"
+
+def test_multi_mode_router():
+    router = ModelRouter(
+        mode="multi",
+        default={"provider":"x","model":"m","api_key":"k"},
+        router_map={"writing": {"provider":"deepseek","model":"v3","api_key":"dk"}}
+    )
+    cfg = router.get_config("writing")
+    assert cfg.provider == "deepseek"
