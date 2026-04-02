@@ -33,3 +33,11 @@ def test_multi_mode_router():
     )
     cfg = router.get_config("writing")
     assert cfg.provider == "deepseek"
+
+from app.config import get_llm_router
+
+def test_get_llm_router_single():
+    router = get_llm_router()
+    assert router.mode == "single"
+    cfg = router.get_config("writing")
+    assert cfg.provider == "openai"
