@@ -62,6 +62,12 @@ class FeedbackResponse(BaseModel):
         from_attributes = True
 
 
+class JobCreate(BaseModel):
+    job_type: str
+    start_chapter: int
+    end_chapter: int
+
+
 class JobResponse(BaseModel):
     id: UUID
     job_type: str
